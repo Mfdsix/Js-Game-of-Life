@@ -2,6 +2,8 @@ let items;
 let frame;
 let winner;
 let gameStart = false;
+let fairMode = true;
+let activeItem;
 
 const size = 20;
 const dimension = {
@@ -45,6 +47,7 @@ function field(){
 }
 
 function initial(){
+    activeItem = 0;
     gameStart = false;
     const colors = [
         'red',
@@ -66,12 +69,17 @@ function initial(){
 
 function move(){
     if(!winner){
-        const item = floor(random(items.length));
+        if(fairMode){
+            activeItem = (activeItem + 1) % 4;
+        }else{
+            activeItem = floor(random(items.length));
+        }
+
         const movement = randomGaussian(10, 15);
-        items[item].x += movement;
+        items[activeItem].x += movement;
     
-        if(items[item].x >= width - size){
-            winner = items[item].bg;
+        if(items[activeItem].x >= width){
+            winner = items[activeItem].bg;
             alert("The winner is: " + winner);
             initial();
         }
